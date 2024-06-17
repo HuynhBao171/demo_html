@@ -1,5 +1,7 @@
+import 'package:demo_html/extension/widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+
+import 'widgets/html_widget.dart';
 
 void main() {
   runApp(const MyApp());
@@ -30,32 +32,15 @@ class DemoWidget extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Demo HTML'),
       ),
-      body: FutureBuilder(
-        future:
-            DefaultAssetBundle.of(context).loadString('assets/html/demo.html'),
-        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-          if (snapshot.hasData) {
-            return SingleChildScrollView(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                child: HtmlWidget(
-                  snapshot.data!,
-                  customStylesBuilder: (element) {
-                    if (element.localName == 'body') {
-                      return {'overflow': 'auto'};
-                    }
-                    return {};
-                  },
-                ),
-              ),
-            );
-          } else if (snapshot.hasError) {
-            return const Text('Error loading HTML file');
-          } else {
-            return const CircularProgressIndicator();
-          }
-        },
+      body: Center(
+        child: const SingleChildScrollView(
+          child: HtmlWidgetFromFile(
+            filePath: 'assets/html/demo.html',
+            customStylesBuilder: {
+              'body': 'overflow: auto',
+            },
+          ),
+        ).paddingHorizontal(10),
       ),
     );
   }
